@@ -6,8 +6,8 @@ int part1(void);
 int part2(void);
 
 int main(int argc, char *argv[]) {
-    printf("Part 1: %d", part1());
-    printf("Part 2: %d", part2());
+    printf("Part 1: %d\n", part1());
+    printf("Part 2: %d\n", part2());
     return 0;
 }
 
