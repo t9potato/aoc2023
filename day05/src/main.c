@@ -77,9 +77,9 @@ typedef struct {
 int part2(void) {
     FILE* inFile = fopen("input/in.txt", "r");
     char ch;
-    range* seeds = malloc(500*sizeof(range));
-    memset(seeds, 0, 500*sizeof(range));
-    long* mached = malloc(500*sizeof(long));
+    range* seeds = malloc(200*sizeof(range));
+    memset(seeds, 0, 200*sizeof(range));
+    long* mached = malloc(200*sizeof(long));
     long state, current, lDest, lSource, lLength, lState, length;
     state = -1;
     length = 0;
@@ -88,7 +88,7 @@ int part2(void) {
             while (fgetc(inFile) != ':');
             state++;
             current = lDest = lSource = lLength = lState = 0;
-            memset(mached, 0, 500*sizeof(long));
+            memset(mached, 0, 200*sizeof(long));
             continue;
         } else if (ch == ' ' && state) {
             if (lState == 0)
@@ -147,7 +147,6 @@ int part2(void) {
         lState = 0;
     }
     long min = LONG_MAX;
-    printf("%ld\n", length);
     for (int i = 0; i < length; i++) {
         if (seeds[i].low < min)
             min = seeds[i].low;
