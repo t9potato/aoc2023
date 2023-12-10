@@ -2,19 +2,22 @@
 #include <stdlib.h>
 #include <string.h>
 
-int part1(void);
-int part2(void);
-
-int main(int argc, char *argv[]) {
-    printf("Part 1: %d\n", part1());
-    printf("Part 2: %d\n", part2());
-    return 0;
-}
-
 typedef struct {
     int x;
     int y;
 } position;
+
+int part1(position* corners, int* cornerCount);
+int part2(position* corners, int cornerCount, int area);
+
+int main(int argc, char *argv[]) {
+    position* corners = malloc(10000*sizeof(position));
+    int cornerCount = 0;
+    int size = part1(corners, &cornerCount);
+    printf("Part 1: %d\n", size/2);
+    printf("Part 2: %d\n", part2(corners, cornerCount, size));
+    return 0;
+}
 
 int eq(position a, position b) {
     if (a.x == b.x && a.y == b.y)
@@ -40,7 +43,7 @@ typedef enum {
     SOUTH,
 } mov;
 
-int part1(void) {
+int part1(position* corners, int* cornerCount) {
     FILE* inFile = fopen("input/in.txt", "r");
     char ch;
 
@@ -121,14 +124,15 @@ int part1(void) {
     }
 
     int i;
+    *cornerCount = 0;
+    mov init = prev;
     for (i = 1; !eq(current, initial); i++) {
+        printf("%d\n", *cornerCount);
         switch(feild[current.x][current.y]) {
-            case NONE:
-                printf("Failed\n");
-                exit(1);
-            case START:
-                goto end;
             case NORTH_EAST:
+                corners[*cornerCount].x = current.x;
+                corners[*cornerCount].y = current.y;
+                (*cornerCount)++;
                 if (prev == NORTH) {
                     prev = WEST;
                     current.x++;
@@ -144,6 +148,9 @@ int part1(void) {
                     current.y--;
                 break;
             case NORTH_WEST:
+                corners[*cornerCount].x = current.x;
+                corners[*cornerCount].y = current.y;
+                (*cornerCount)++;
                 if (prev == NORTH) {
                     prev = EAST;
                     current.x--;
@@ -153,6 +160,9 @@ int part1(void) {
                 }
                 break;
             case SOUTH_EAST:
+                corners[*cornerCount].x = current.x;
+                corners[*cornerCount].y = current.y;
+                (*cornerCount)++;
                 if (prev == SOUTH) {
                     prev = WEST;
                     current.x++;
@@ -162,6 +172,9 @@ int part1(void) {
                 }
                 break;
             case SOUTH_WEST:
+                corners[*cornerCount].x = current.x;
+                corners[*cornerCount].y = current.y;
+                (*cornerCount)++;
                 if (prev == SOUTH) {
                     prev = EAST;
                     current.x--;
@@ -176,21 +189,36 @@ int part1(void) {
                 else
                     current.x--;
                 break;
+            default:
+                printf("Failed\n");
+                exit(1);
         }
     }
-end:
+    if (!((prev == EAST && init == WEST) ||
+        (prev == WEST && init == EAST) ||
+        (prev == SOUTH && init == NORTH) ||
+        (prev == NORTH && init == SOUTH))){
+                corners[*cornerCount].x = current.x;
+                corners[*cornerCount].y = current.y;
+                (*cornerCount)++;
+    }
+
+    (*cornerCount)--;
     for (int i = 0; i < width; i++)
         free(feild[i]);
     free(feild);
     fclose(inFile);
-    return i/2;
+    return i;
 }
 
-int part2(void) {
-    FILE* inFile = fopen("input/in.txt", "r");
-    char ch;
-    while ((ch = fgetc(inFile)) != EOF) {
+int part2(position* corners, int cornerCount, int borderArea) {
+    int area = 0;
+    for (int i = 0; i < cornerCount; i++) {
+        area += (corners[i].x-corners[i+1].x)*(corners[i].y+corners[i+1].y);
     }
-    fclose(inFile);
-    return 1;
+    area += (corners[cornerCount].x-corners[0].x)*(corners[cornerCount].y+corners[0].y);
+    area /= 2;
+    area = abs(area);
+
+    return area - (borderArea/2) + 1;
 }
