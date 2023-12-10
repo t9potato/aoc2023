@@ -16,6 +16,7 @@ int part1(void) {
     char ch;
     while ((ch = fgetc(inFile)) != EOF) {
     }
+    fclose(inFile);
 }
 
 int part2(void) {
@@ -23,4 +24,5 @@ int part2(void) {
     char ch;
     while ((ch = fgetc(inFile)) != EOF) {
     }
+    fclose(inFile);
 }

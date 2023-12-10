@@ -16,6 +16,9 @@ int main(void) {
 int lettersToIndex(char letters[3]) {
     return (letters[0] - 'A') * 676 + (letters[1] - 'A') * 26 + letters[2] - 'A';
 }
+void p(int a) {
+    printf("%c%c%c\n", (a/676) + 'A', ((a%676)/26) + 'A', (a%26) + 'A');
+}
 
 typedef struct value {
     int left;
@@ -84,6 +87,11 @@ int part1(void) {
 }
 
 int gcd(int a, int b) {
+    if(b>a) {
+        int c = b;
+        b = a;
+        a = c;
+    }
     if (b == 0)
         return a;
     return gcd(b, a % b);
@@ -164,7 +172,6 @@ long part2(void) {
         }
     }
     long result = j[0];
-    printf("%d\n", j[0]);
     for (int k = 1; k < keysIndex; k++) {
         result = lcm(result, j[k]);
     }
