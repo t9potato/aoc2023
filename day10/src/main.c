@@ -127,7 +127,6 @@ int part1(position* corners, int* cornerCount) {
     *cornerCount = 0;
     mov init = prev;
     for (i = 1; !eq(current, initial); i++) {
-        printf("%d\n", *cornerCount);
         switch(feild[current.x][current.y]) {
             case NORTH_EAST:
                 corners[*cornerCount].x = current.x;
